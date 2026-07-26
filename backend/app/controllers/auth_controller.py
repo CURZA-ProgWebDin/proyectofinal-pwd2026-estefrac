@@ -1,7 +1,7 @@
 from app.models import db
 from app.models.usuario import Usuario
 from flask import Response, jsonify
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity
 
 class AuthController:
 
@@ -31,3 +31,20 @@ class AuthController:
                 }), 200
             return jsonify({"message": "Credenciales inválidas"}), 401
         return jsonify({"message": error}), 422
+
+    @staticmethod
+    def me() -> tuple[Response, int]:
+        user_id = get_jwt_identity()
+
+        user = db.session.execute(
+            db.select(Usuario).filter_by(id=user_id)
+        ).scalar_one_or_none()
+
+        if user:
+            return jsonify({
+                "id": user.id,
+                "nombre": user.nombre,
+                "email": user.email,
+                "rol": user.rol.nombre if user.rol else None
+            }), 200
+        return jsonify({"message": "Usuario no encontrado"}), 404
