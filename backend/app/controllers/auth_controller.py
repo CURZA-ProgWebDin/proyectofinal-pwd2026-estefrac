@@ -19,7 +19,7 @@ class AuthController:
             error = "La contraseña es requerida"
         if error is None:
             user = db.session.execute(db.select(Usuario).filter_by(nombre=nombre)).scalar_one_or_none()
-            if user and user.validate_password(password):
+            if user and user.activo == "S" and user.validate_password(password):
                 access_token = create_access_token(
                     identity=str(user.id),
                     additional_claims={"rol": user.rol.nombre if user.rol else None}
