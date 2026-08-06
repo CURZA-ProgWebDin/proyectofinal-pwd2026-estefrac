@@ -1,5 +1,6 @@
 from app.models import db
 from app.models.usuario import Usuario
+from app.models.rol import Rol
 from flask import Response, jsonify
 from flask_jwt_extended import create_access_token, get_jwt_identity
 

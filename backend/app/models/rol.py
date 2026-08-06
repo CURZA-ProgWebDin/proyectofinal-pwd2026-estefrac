@@ -7,6 +7,9 @@ class Rol(BaseModel):
     activo = db.Column(db.String(1), nullable=False, default='S')
     usuarios = db.relationship('Usuario', back_populates='rol')
 
+    def __init__(self, nombre: str) -> None:
+        self.nombre = nombre
+
     def to_dict(self):
         data = super().to_dict()
         data.update({
