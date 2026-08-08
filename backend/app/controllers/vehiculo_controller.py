@@ -210,4 +210,4 @@ class VehiculoController(Controller):
         vehiculo.activo = "N"
         db.session.commit()
 
-        return jsonify({"message": "Vehículo eliminado exitosamente."}), 200
+        return jsonify({"message": "Vehículo desactivado exitosamente."}), 200
