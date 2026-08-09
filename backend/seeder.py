@@ -23,6 +23,8 @@ with app.app_context():
         rol_operador = Rol(nombre="operador")
         db.session.add(rol_operador)
 
+    db.session.flush()
+
     admin_por_nombre = db.session.execute(
         db.select(Usuario).filter_by(nombre="admin")
     ).scalar_one_or_none()
@@ -55,7 +57,7 @@ with app.app_context():
         admin = Usuario(
             nombre="admin",
             email="admin@controlflota.com",
-            rol=rol_admin,
+            rol_id=rol_admin.id,
             password_hash="",
         )
         admin.generate_password("admin123")

@@ -11,6 +11,12 @@ class Usuario(BaseModel):
     password_hash = db.Column(db.String(255), nullable=False)
     activo = db.Column(db.String(1), nullable=False, default='S')
 
+    def __init__(self, nombre: str, email:str, rol_id: int, password_hash:str) -> None:
+        self.nombre = nombre
+        self.email = email
+        self.rol_id = rol_id
+        self.password_hash = password_hash
+
     def to_dict(self):
         data = super().to_dict()
         data.update({
