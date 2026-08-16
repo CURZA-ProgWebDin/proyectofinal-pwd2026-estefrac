@@ -12,26 +12,27 @@ class AuthController:
 
         nombre: str | None = request.get('nombre')
         password: str | None = request.get('password')
-        error: str | None = None
 
         if nombre is None:
-            error = "El nombre es requerido"
+            return jsonify({"message": "El nombre es requerido"}), 422
+
         if password is None:
-            error = "La contraseña es requerida"
-        if error is None:
-            user = db.session.execute(db.select(Usuario).filter_by(nombre=nombre)).scalar_one_or_none()
-            if user and user.activo == "S" and user.validate_password(password):
-                access_token = create_access_token(
-                    identity=str(user.id),
-                    additional_claims={"rol": user.rol.nombre if user.rol else None}
-                )
-                return jsonify({
-                    "access_token": access_token,
-                    "rol": user.rol.nombre if user.rol else None,
-                    "nombre": user.nombre
-                }), 200
-            return jsonify({"message": "Credenciales inválidas"}), 401
-        return jsonify({"message": error}), 422
+            return jsonify({"message": "La contraseña es requerida"}), 422
+
+        user = db.session.execute(db.select(Usuario).filter_by(nombre=nombre)).scalar_one_or_none()
+
+        if user and user.activo == "S" and user.validate_password(password):
+            access_token = create_access_token(
+                identity=str(user.id),
+                additional_claims={"rol": user.rol.nombre if user.rol else None}
+            )
+            return jsonify({
+                "access_token": access_token,
+                "rol": user.rol.nombre if user.rol else None,
+                "nombre": user.nombre
+            }), 200
+
+        return jsonify({"message": "Credenciales inválidas"}), 401
 
     @staticmethod
     def me() -> tuple[Response, int]:

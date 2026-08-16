@@ -33,34 +33,29 @@ class TipoVehiculoController(Controller):
         nombre: str | None = request.get("nombre")
         unidad_uso: str | None = request.get("unidad_uso")
 
-        error: str | None = None
-
         if nombre is None:
-            error = "El nombre es requerido"
+            return jsonify({"message": "El nombre es requerido"}), 422
 
         if unidad_uso is None:
-            error = "La unidad de uso es requerida"
+            return jsonify({"message": "La unidad de uso es requerida"}), 422
 
-        if unidad_uso is not None and unidad_uso not in ["kilometros", "horas"]:
-            error = "La unidad de uso debe ser kilometros u horas"
-        
-        # Confirmo que nombre y unidad de uso sean textos y no valores nulos.
-        if error is None and nombre is not None and unidad_uso is not None:
-            try:
-                tipo_vehiculo = TipoVehiculo(nombre=nombre, unidad_uso=unidad_uso)
-                db.session.add(tipo_vehiculo)
-                db.session.commit()
-                return jsonify({
-                    "message": "Tipo de vehículo creado exitosamente"
-                }), 201
+        if unidad_uso not in ["kilometros", "horas"]:
+            return jsonify({"message": "La unidad de uso debe ser kilometros u horas"}), 422
 
-            except IntegrityError:
-                db.session.rollback()
+        try:
+            tipo_vehiculo = TipoVehiculo(nombre=nombre, unidad_uso=unidad_uso)
+            db.session.add(tipo_vehiculo)
+            db.session.commit()
+            return jsonify({
+                "message": "Tipo de vehículo creado exitosamente"
+            }), 201
 
-                return jsonify({
-                    "message": "El nombre del tipo de vehículo ya existe"
-                }), 409
-        return jsonify({"message": error}), 422
+        except IntegrityError:
+            db.session.rollback()
+
+            return jsonify({
+                "message": "El nombre del tipo de vehículo ya existe"
+            }), 409
 
     @staticmethod
     def update(request: dict, id: int) -> tuple[Response, int]:
@@ -68,46 +63,41 @@ class TipoVehiculoController(Controller):
         unidad_uso: str | None = request.get("unidad_uso")
         activo: str | None = request.get("activo")
 
-        error: str | None = None
-
         if nombre is None:
-            error = "El nombre es requerido"
+            return jsonify({"message": "El nombre es requerido"}), 422
 
         if unidad_uso is None:
-            error = "La unidad de uso es requerida"
+            return jsonify({"message": "La unidad de uso es requerida"}), 422
 
-        if unidad_uso is not None and unidad_uso not in ["kilometros", "horas"]:
-            error = "La unidad de uso debe ser kilometros u horas"
+        if unidad_uso not in ["kilometros", "horas"]:
+            return jsonify({"message": "La unidad de uso debe ser kilometros u horas"}), 422
 
         if activo is None:
-            error = "El estado activo es requerido"
+            return jsonify({"message": "El estado activo es requerido"}), 422
 
-        if activo is not None and activo not in ["S", "N"]:
-            error = "El estado activo debe ser S o N"
+        if activo not in ["S", "N"]:
+            return jsonify({"message": "El estado activo debe ser S o N"}), 422
 
-        if error is None and nombre is not None and unidad_uso is not None and activo is not None:
-            tipo_vehiculo = db.session.get(TipoVehiculo, id)
+        tipo_vehiculo = db.session.get(TipoVehiculo, id)
 
-            if tipo_vehiculo:
-                try:
-                    tipo_vehiculo.nombre = nombre
-                    tipo_vehiculo.unidad_uso = unidad_uso
-                    tipo_vehiculo.activo = activo
-                    db.session.commit()
-                    return jsonify({
-                        "message": "Tipo de vehículo actualizado exitosamente"
-                    }), 200
+        if tipo_vehiculo:
+            try:
+                tipo_vehiculo.nombre = nombre
+                tipo_vehiculo.unidad_uso = unidad_uso
+                tipo_vehiculo.activo = activo
+                db.session.commit()
+                return jsonify({
+                    "message": "Tipo de vehículo actualizado exitosamente"
+                }), 200
 
-                except IntegrityError:
-                    db.session.rollback()
+            except IntegrityError:
+                db.session.rollback()
 
-                    return jsonify({
-                        "message": "El nombre del tipo de vehículo ya existe"
-                    }), 409
+                return jsonify({
+                    "message": "El nombre del tipo de vehículo ya existe"
+                }), 409
 
-            return jsonify({"message": "Tipo de vehículo no encontrado"}), 404
-
-        return jsonify({"message": error}), 422
+        return jsonify({"message": "Tipo de vehículo no encontrado"}), 404
 
     @staticmethod
     def destroy(id: int) -> tuple[Response, int]:
