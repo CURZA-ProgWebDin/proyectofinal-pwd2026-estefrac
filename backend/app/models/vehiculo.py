@@ -11,9 +11,9 @@ class Vehiculo(BaseModel):
     tipo_vehiculo_id = db.Column(db.Integer, db.ForeignKey("tipos_vehiculos.id"), nullable=False)
     uso_actual = db.Column(db.Integer, nullable=False, default=0)
     estado = db.Column(db.String(30), nullable=False, default="disponible")
-    activo = db.Column(db.String(1), nullable=False, default="S")
 
     tipo_vehiculo = db.relationship("TipoVehiculo", back_populates="vehiculos")
+    documentaciones = db.relationship("DocumentacionVehiculo", back_populates="vehiculo")
 
     def __init__(self, patente: str, marca: str, modelo: str, anio: int, tipo_vehiculo_id: int, uso_actual:int) -> None:
         self.patente = patente
@@ -32,7 +32,6 @@ class Vehiculo(BaseModel):
             "anio": self.anio,
             "tipo_vehiculo_id": self.tipo_vehiculo_id,
             "uso_actual": self.uso_actual,
-            "estado": self.estado,
-            "activo": self.activo
+            "estado": self.estado
         })
         return data

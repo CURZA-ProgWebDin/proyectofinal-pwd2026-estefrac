@@ -12,7 +12,6 @@ class Conductor(BaseModel):
     telefono = db.Column(db.String(30), nullable=False)
     licencia_numero = db.Column(db.String(50), nullable=False, unique=True)
     licencia_vencimiento = db.Column(db.Date, nullable=False)
-    activo = db.Column(db.String(1), nullable=False, default="S")
 
     def __init__(
         self,
@@ -38,7 +37,6 @@ class Conductor(BaseModel):
             "dni": self.dni,
             "telefono": self.telefono,
             "licencia_numero": self.licencia_numero,
-            "licencia_vencimiento": (self.licencia_vencimiento.isoformat() if self.licencia_vencimiento else None),
-            "activo": self.activo
+            "licencia_vencimiento": (self.licencia_vencimiento.isoformat() if self.licencia_vencimiento else None)
         })
         return data

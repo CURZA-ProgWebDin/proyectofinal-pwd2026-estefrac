@@ -6,7 +6,6 @@ class TipoVehiculo(BaseModel):
 
     nombre = db.Column(db.String(50), unique=True, nullable=False)
     unidad_uso = db.Column(db.String(20), nullable=False)
-    activo = db.Column(db.String(1), nullable=False, default="S")
     vehiculos = db.relationship("Vehiculo", back_populates="tipo_vehiculo")
 
     def __init__(self, nombre: str, unidad_uso: str) -> None:
@@ -17,7 +16,6 @@ class TipoVehiculo(BaseModel):
         data = super().to_dict()
         data.update({
             "nombre": self.nombre,
-            "unidad_uso": self.unidad_uso,
-            "activo": self.activo
+            "unidad_uso": self.unidad_uso
         })
         return data

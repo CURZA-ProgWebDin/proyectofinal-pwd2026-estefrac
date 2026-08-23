@@ -8,8 +8,9 @@ class Usuario(BaseModel):
     email = db.Column(db.String(120), nullable=False, unique=True)
     rol_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
     rol = db.relationship('Rol', back_populates='usuarios')
+    documentaciones_cargadas = db.relationship("DocumentacionVehiculo", foreign_keys="DocumentacionVehiculo.usuario_id", back_populates="usuario")
+    documentaciones_actualizadas = db.relationship("DocumentacionVehiculo", foreign_keys="DocumentacionVehiculo.usuario_actualizacion_id", back_populates="usuario_actualizacion")
     password_hash = db.Column(db.String(255), nullable=False)
-    activo = db.Column(db.String(1), nullable=False, default='S')
 
     def __init__(self, nombre: str, email:str, rol_id: int, password_hash:str) -> None:
         self.nombre = nombre
@@ -22,8 +23,7 @@ class Usuario(BaseModel):
         data.update({
             "nombre": self.nombre,
             "email": self.email,
-            "rol_id": self.rol_id,
-            "activo": self.activo
+            "rol_id": self.rol_id
         })
         return data
 

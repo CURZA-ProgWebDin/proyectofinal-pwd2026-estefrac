@@ -6,7 +6,7 @@ class TipoDocumentacion(BaseModel):
 
     nombre = db.Column(db.String(50), nullable=False, unique=True)
     obligatorio = db.Column(db.Boolean, nullable=False, default=True)
-    activo = db.Column(db.String(1), nullable=False, default="S")
+    documentaciones = db.relationship("DocumentacionVehiculo", back_populates="tipo_documentacion")
 
     def __init__(self, nombre: str, obligatorio: bool) -> None:
         self.nombre = nombre
@@ -16,7 +16,6 @@ class TipoDocumentacion(BaseModel):
         data = super().to_dict()
         data.update({
             "nombre": self.nombre,
-            "obligatorio": self.obligatorio,
-            "activo": self.activo
+            "obligatorio": self.obligatorio
         })
         return data
