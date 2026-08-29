@@ -40,6 +40,7 @@ class Vehiculo(BaseModel):
             data["documentaciones"] = [
                 documentacion.to_dict(incluye_tipo_documentacion=True)
                 for documentacion in cast(list[Any], self.documentaciones)
+                if documentacion.activo == "S"
             ]
 
         return data
