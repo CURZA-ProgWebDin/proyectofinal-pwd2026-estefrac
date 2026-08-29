@@ -1,5 +1,6 @@
 from app.models.base_model import BaseModel
 from app.models import db
+from typing import Any, cast
 
 class Vehiculo(BaseModel):
     __tablename__ = "vehiculos"
@@ -23,7 +24,7 @@ class Vehiculo(BaseModel):
         self.tipo_vehiculo_id = tipo_vehiculo_id
         self.uso_actual = uso_actual
 
-    def to_dict(self) -> dict:
+    def to_dict(self, incluye_documentaciones: bool = False) -> dict:
         data = super().to_dict()
         data.update({
             "patente": self.patente,
@@ -34,4 +35,11 @@ class Vehiculo(BaseModel):
             "uso_actual": self.uso_actual,
             "estado": self.estado
         })
+
+        if incluye_documentaciones:
+            data["documentaciones"] = [
+                documentacion.to_dict()
+                for documentacion in cast(list[Any], self.documentaciones)
+            ]
+
         return data

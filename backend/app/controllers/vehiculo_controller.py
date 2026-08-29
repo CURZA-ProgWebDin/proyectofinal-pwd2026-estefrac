@@ -22,7 +22,7 @@ class VehiculoController(Controller):
         vehiculo = db.session.get(Vehiculo, id)
 
         if vehiculo:
-            return jsonify(vehiculo.to_dict()), 200
+            return jsonify(vehiculo.to_dict(incluye_documentaciones=True)), 200
 
         return jsonify({"message": "Vehículo no encontrado."}), 404
 
