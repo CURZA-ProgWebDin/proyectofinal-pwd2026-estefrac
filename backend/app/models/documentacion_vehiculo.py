@@ -26,7 +26,7 @@ class DocumentacionVehiculo(BaseModel):
         self.numero = numero
         self.fecha_emision = fecha_emision
         self.fecha_vencimiento = fecha_vencimiento
-    def to_dict(self) -> dict:
+    def to_dict(self, incluye_tipo_documentacion: bool = False) -> dict:
         data = super().to_dict()
         data.update({
             "vehiculo_id": self.vehiculo_id,
@@ -45,4 +45,8 @@ class DocumentacionVehiculo(BaseModel):
                 else None
             )
         })
+
+        if incluye_tipo_documentacion:
+            data["tipo_documentacion"] = self.tipo_documentacion.to_dict()
+
         return data

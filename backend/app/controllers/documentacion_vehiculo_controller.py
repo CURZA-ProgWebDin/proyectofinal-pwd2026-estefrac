@@ -30,7 +30,7 @@ class DocumentacionVehiculoController(Controller):
         documentacion = db.session.get(DocumentacionVehiculo, id)
 
         if documentacion:
-            return jsonify(documentacion.to_dict()), 200
+            return jsonify(documentacion.to_dict(incluye_tipo_documentacion=True)), 200
 
         return jsonify({
             "message": "Documentación vehicular no encontrada"
