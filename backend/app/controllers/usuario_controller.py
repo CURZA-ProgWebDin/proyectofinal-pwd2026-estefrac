@@ -22,7 +22,7 @@ class UsuarioController(Controller):
         usuario = db.session.get(Usuario, id)
 
         if usuario:
-            return jsonify(usuario.to_dict()), 200
+            return jsonify(usuario.to_dict(incluye_rol=True)), 200
 
         return jsonify({"message": "Usuario no encontrado"}), 404
 

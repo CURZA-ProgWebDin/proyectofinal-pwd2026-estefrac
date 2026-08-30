@@ -18,13 +18,15 @@ class Usuario(BaseModel):
         self.rol_id = rol_id
         self.password_hash = password_hash
 
-    def to_dict(self):
+    def to_dict(self, incluye_rol: bool = False) -> dict:
         data = super().to_dict()
         data.update({
             "nombre": self.nombre,
             "email": self.email,
             "rol_id": self.rol_id
         })
+        if incluye_rol:
+            data["rol"] = self.rol.to_dict()
         return data
 
     def generate_password(self, password):
