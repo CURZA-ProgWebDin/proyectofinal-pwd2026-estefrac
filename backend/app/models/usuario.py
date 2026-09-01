@@ -1,18 +1,38 @@
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from . import db
 from .base_model import BaseModel
-from werkzeug.security import generate_password_hash, check_password_hash
+
 
 class Usuario(BaseModel):
-    __tablename__ = 'usuarios'
+    __tablename__ = "usuarios"
     nombre = db.Column(db.String(100), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
-    rol_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False)
-    rol = db.relationship('Rol', back_populates='usuarios')
-    documentaciones_cargadas = db.relationship("DocumentacionVehiculo", foreign_keys="DocumentacionVehiculo.usuario_id", back_populates="usuario")
-    documentaciones_actualizadas = db.relationship("DocumentacionVehiculo", foreign_keys="DocumentacionVehiculo.usuario_actualizacion_id", back_populates="usuario_actualizacion")
+    rol_id = db.Column(db.Integer, db.ForeignKey("roles.id"), nullable=False)
+    rol = db.relationship("Rol", back_populates="usuarios")
+    documentaciones_cargadas = db.relationship(
+        "DocumentacionVehiculo",
+        foreign_keys="DocumentacionVehiculo.usuario_id",
+        back_populates="usuario",
+    )
+    documentaciones_actualizadas = db.relationship(
+        "DocumentacionVehiculo",
+        foreign_keys="DocumentacionVehiculo.usuario_actualizacion_id",
+        back_populates="usuario_actualizacion",
+    )
+    asignaciones_creadas = db.relationship(
+        "Asignacion", foreign_keys="Asignacion.usuario_id", back_populates="usuario"
+    )
+    asignaciones_actualizadas = db.relationship(
+        "Asignacion",
+        foreign_keys="Asignacion.usuario_actualizacion_id",
+        back_populates="usuario_actualizacion",
+    )
     password_hash = db.Column(db.String(255), nullable=False)
 
-    def __init__(self, nombre: str, email:str, rol_id: int, password_hash:str) -> None:
+    def __init__(
+        self, nombre: str, email: str, rol_id: int, password_hash: str
+    ) -> None:
         self.nombre = nombre
         self.email = email
         self.rol_id = rol_id
@@ -20,11 +40,7 @@ class Usuario(BaseModel):
 
     def to_dict(self, incluye_rol: bool = False) -> dict:
         data = super().to_dict()
-        data.update({
-            "nombre": self.nombre,
-            "email": self.email,
-            "rol_id": self.rol_id
-        })
+        data.update({"nombre": self.nombre, "email": self.email, "rol_id": self.rol_id})
         if incluye_rol:
             data["rol"] = self.rol.to_dict()
         return data

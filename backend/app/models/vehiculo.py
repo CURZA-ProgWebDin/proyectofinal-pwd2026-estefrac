@@ -1,6 +1,8 @@
-from app.models.base_model import BaseModel
-from app.models import db
 from typing import Any, cast
+
+from app.models import db
+from app.models.base_model import BaseModel
+
 
 class Vehiculo(BaseModel):
     __tablename__ = "vehiculos"
@@ -9,14 +11,27 @@ class Vehiculo(BaseModel):
     marca = db.Column(db.String(50), nullable=False)
     modelo = db.Column(db.String(50), nullable=False)
     anio = db.Column(db.Integer, nullable=False)
-    tipo_vehiculo_id = db.Column(db.Integer, db.ForeignKey("tipos_vehiculos.id"), nullable=False)
+    tipo_vehiculo_id = db.Column(
+        db.Integer, db.ForeignKey("tipos_vehiculos.id"), nullable=False
+    )
     uso_actual = db.Column(db.Integer, nullable=False, default=0)
     estado = db.Column(db.String(30), nullable=False, default="disponible")
 
     tipo_vehiculo = db.relationship("TipoVehiculo", back_populates="vehiculos")
-    documentaciones = db.relationship("DocumentacionVehiculo", back_populates="vehiculo")
+    documentaciones = db.relationship(
+        "DocumentacionVehiculo", back_populates="vehiculo"
+    )
+    asignaciones = db.relationship("Asignacion", back_populates="vehiculo")
 
-    def __init__(self, patente: str, marca: str, modelo: str, anio: int, tipo_vehiculo_id: int, uso_actual:int) -> None:
+    def __init__(
+        self,
+        patente: str,
+        marca: str,
+        modelo: str,
+        anio: int,
+        tipo_vehiculo_id: int,
+        uso_actual: int,
+    ) -> None:
         self.patente = patente
         self.marca = marca
         self.modelo = modelo
@@ -26,15 +41,17 @@ class Vehiculo(BaseModel):
 
     def to_dict(self, incluye_documentaciones: bool = False) -> dict:
         data = super().to_dict()
-        data.update({
-            "patente": self.patente,
-            "marca": self.marca,
-            "modelo": self.modelo,
-            "anio": self.anio,
-            "tipo_vehiculo_id": self.tipo_vehiculo_id,
-            "uso_actual": self.uso_actual,
-            "estado": self.estado
-        })
+        data.update(
+            {
+                "patente": self.patente,
+                "marca": self.marca,
+                "modelo": self.modelo,
+                "anio": self.anio,
+                "tipo_vehiculo_id": self.tipo_vehiculo_id,
+                "uso_actual": self.uso_actual,
+                "estado": self.estado,
+            }
+        )
 
         if incluye_documentaciones:
             data["documentaciones"] = [

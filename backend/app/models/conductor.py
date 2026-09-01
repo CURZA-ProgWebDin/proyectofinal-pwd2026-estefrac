@@ -1,6 +1,7 @@
-from app.models.base_model import BaseModel
-from app.models import db
 from datetime import date
+
+from app.models import db
+from app.models.base_model import BaseModel
 
 
 class Conductor(BaseModel):
@@ -13,6 +14,8 @@ class Conductor(BaseModel):
     licencia_numero = db.Column(db.String(50), nullable=False, unique=True)
     licencia_vencimiento = db.Column(db.Date, nullable=False)
 
+    asignaciones = db.relationship("Asignacion", back_populates="conductor")
+
     def __init__(
         self,
         nombre: str,
@@ -20,7 +23,7 @@ class Conductor(BaseModel):
         dni: str,
         telefono: str,
         licencia_numero: str,
-        licencia_vencimiento: date
+        licencia_vencimiento: date,
     ) -> None:
         self.nombre = nombre
         self.apellido = apellido
@@ -31,12 +34,18 @@ class Conductor(BaseModel):
 
     def to_dict(self) -> dict:
         data = super().to_dict()
-        data.update({
-            "nombre": self.nombre,
-            "apellido": self.apellido,
-            "dni": self.dni,
-            "telefono": self.telefono,
-            "licencia_numero": self.licencia_numero,
-            "licencia_vencimiento": (self.licencia_vencimiento.isoformat() if self.licencia_vencimiento else None)
-        })
+        data.update(
+            {
+                "nombre": self.nombre,
+                "apellido": self.apellido,
+                "dni": self.dni,
+                "telefono": self.telefono,
+                "licencia_numero": self.licencia_numero,
+                "licencia_vencimiento": (
+                    self.licencia_vencimiento.isoformat()
+                    if self.licencia_vencimiento
+                    else None
+                ),
+            }
+        )
         return data
