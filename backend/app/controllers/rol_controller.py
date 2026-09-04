@@ -1,13 +1,17 @@
+from flask import Response, jsonify
+from sqlalchemy.exc import IntegrityError
+
 from app.controllers import Controller
 from app.models import db
 from app.models.rol import Rol
-from flask import Response, jsonify
-from sqlalchemy.exc import IntegrityError
+
 
 class RolController(Controller):
     @staticmethod
     def get_all() -> tuple[Response, int]:
-        roles = db.session.execute(db.select(Rol).order_by(db.desc(Rol.id))).scalars().all()
+        roles = (
+            db.session.execute(db.select(Rol).order_by(db.desc(Rol.id))).scalars().all()
+        )
 
         if roles:
             return jsonify([rol.to_dict() for rol in roles]), 200
@@ -80,7 +84,7 @@ class RolController(Controller):
         if rol is None:
             return jsonify({"message": "Rol no encontrado"}), 404
 
-        rol.activo = 'N'
+        rol.activo = "N"
         db.session.commit()
 
         return jsonify({"message": "Rol desactivado exitosamente"}), 200

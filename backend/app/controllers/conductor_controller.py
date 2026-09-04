@@ -1,16 +1,21 @@
+from datetime import date
+
+from flask import Response, jsonify
+from sqlalchemy.exc import IntegrityError
+
 from app.controllers import Controller
 from app.models import db
 from app.models.conductor import Conductor
-from flask import Response, jsonify
-from sqlalchemy.exc import IntegrityError
-from datetime import date
+
 
 class ConductorController(Controller):
     @staticmethod
     def get_all() -> tuple[Response, int]:
-        conductores = db.session.execute(
-            db.select(Conductor).order_by(db.desc(Conductor.id))
-        ).scalars().all()
+        conductores = (
+            db.session.execute(db.select(Conductor).order_by(db.desc(Conductor.id)))
+            .scalars()
+            .all()
+        )
 
         if conductores:
             return jsonify([conductor.to_dict() for conductor in conductores]), 200
@@ -20,7 +25,7 @@ class ConductorController(Controller):
     @staticmethod
     def show(id: int) -> tuple[Response, int]:
         conductor = db.session.get(Conductor, id)
-        
+
         if conductor:
             return jsonify(conductor.to_dict()), 200
 
@@ -51,12 +56,16 @@ class ConductorController(Controller):
             return jsonify({"message": "El número de licencia es requerido"}), 422
 
         if licencia_vencimiento_texto is None:
-            return jsonify({"message": "El vencimiento de la licencia es requerido"}), 422
+            return jsonify(
+                {"message": "El vencimiento de la licencia es requerido"}
+            ), 422
 
         try:
             licencia_vencimiento = date.fromisoformat(licencia_vencimiento_texto)
         except (TypeError, ValueError):
-            return jsonify({"message": "El vencimiento debe tener formato YYYY-MM-DD"}), 422
+            return jsonify(
+                {"message": "El vencimiento debe tener formato YYYY-MM-DD"}
+            ), 422
 
         try:
             conductor = Conductor(
@@ -65,7 +74,7 @@ class ConductorController(Controller):
                 dni=dni,
                 telefono=telefono,
                 licencia_numero=licencia_numero,
-                licencia_vencimiento=licencia_vencimiento
+                licencia_vencimiento=licencia_vencimiento,
             )
 
             db.session.add(conductor)
@@ -104,7 +113,9 @@ class ConductorController(Controller):
             return jsonify({"message": "El número de licencia es requerido"}), 422
 
         if licencia_vencimiento_texto is None:
-            return jsonify({"message": "El vencimiento de la licencia es requerido"}), 422
+            return jsonify(
+                {"message": "El vencimiento de la licencia es requerido"}
+            ), 422
 
         if activo is None:
             return jsonify({"message": "El estado activo es requerido"}), 422
@@ -115,7 +126,9 @@ class ConductorController(Controller):
         try:
             licencia_vencimiento = date.fromisoformat(licencia_vencimiento_texto)
         except (TypeError, ValueError):
-            return jsonify({"message": "El vencimiento debe tener formato YYYY-MM-DD"}), 422
+            return jsonify(
+                {"message": "El vencimiento debe tener formato YYYY-MM-DD"}
+            ), 422
 
         conductor = db.session.get(Conductor, id)
 
