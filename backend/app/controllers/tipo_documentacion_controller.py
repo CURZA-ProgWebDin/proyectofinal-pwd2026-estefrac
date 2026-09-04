@@ -1,8 +1,10 @@
+from flask import Response, jsonify
+from sqlalchemy.exc import IntegrityError
+
 from app.controllers import Controller
 from app.models import db
 from app.models.tipo_documentacion import TipoDocumentacion
-from flask import Response, jsonify
-from sqlalchemy.exc import IntegrityError
+
 
 class TipoDocumentacionController(Controller):
     @staticmethod

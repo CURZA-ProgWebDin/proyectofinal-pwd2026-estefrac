@@ -2,10 +2,9 @@ from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 
 from app.controllers.documentacion_vehiculo_controller import (
-    DocumentacionVehiculoController
+    DocumentacionVehiculoController,
 )
 from app.decorators.rol_access import rol_access
-
 
 documentacion_vehiculo_bp = Blueprint(
     "documentacion_vehiculo",

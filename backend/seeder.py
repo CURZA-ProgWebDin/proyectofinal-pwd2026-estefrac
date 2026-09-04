@@ -3,7 +3,6 @@ from app.models import db
 from app.models.rol import Rol
 from app.models.usuario import Usuario
 
-
 app = create_app()
 
 with app.app_context():

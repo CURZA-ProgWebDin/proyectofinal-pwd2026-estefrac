@@ -1,9 +1,11 @@
-from app.controllers import Controller
-from app.models import db
-from app.models.usuario import Usuario
-from app.models.rol import Rol
 from flask import Response, jsonify
 from sqlalchemy.exc import IntegrityError
+
+from app.controllers import Controller
+from app.models import db
+from app.models.rol import Rol
+from app.models.usuario import Usuario
+
 
 class UsuarioController(Controller):
     @staticmethod

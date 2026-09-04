@@ -4,7 +4,6 @@ from flask_jwt_extended import jwt_required
 from app.controllers.usuario_controller import UsuarioController
 from app.decorators.rol_access import rol_access
 
-
 usuario_bp = Blueprint(
     "usuario",
     __name__,

@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+
 from flask import Response
+
 
 class ControllerInterface(ABC):
 

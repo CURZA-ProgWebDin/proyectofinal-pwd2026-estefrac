@@ -4,7 +4,6 @@ from flask_jwt_extended import jwt_required
 from app.controllers.conductor_controller import ConductorController
 from app.decorators.rol_access import rol_access
 
-
 conductor_bp = Blueprint(
     "conductor",
     __name__,

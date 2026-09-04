@@ -1,6 +1,7 @@
 from . import db
 from .base_model import BaseModel
 
+
 class Rol(BaseModel):
     __tablename__ = 'roles'
     nombre = db.Column(db.String(50), nullable=False, unique=True)

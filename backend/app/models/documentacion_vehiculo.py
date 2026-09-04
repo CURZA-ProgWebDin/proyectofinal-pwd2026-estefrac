@@ -1,6 +1,8 @@
-from app.models.base_model import BaseModel
-from app.models import db
 from datetime import date
+
+from app.models import db
+from app.models.base_model import BaseModel
+
 
 class DocumentacionVehiculo(BaseModel):
     __tablename__ = "documentacion_vehiculos"

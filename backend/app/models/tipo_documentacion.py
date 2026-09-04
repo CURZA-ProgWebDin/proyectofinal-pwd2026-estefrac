@@ -1,5 +1,6 @@
-from app.models.base_model import BaseModel
 from app.models import db
+from app.models.base_model import BaseModel
+
 
 class TipoDocumentacion(BaseModel):
     __tablename__ = "tipos_documentacion"

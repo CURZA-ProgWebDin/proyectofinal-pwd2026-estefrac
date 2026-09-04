@@ -1,8 +1,10 @@
 from functools import wraps
-from flask import jsonify
-from flask_jwt_extended import get_jwt_identity
+
 from app.models import db
 from app.models.usuario import Usuario
+from flask import jsonify
+from flask_jwt_extended import get_jwt_identity
+
 
 def rol_access(roles_permitidos):
     def decorator(func):

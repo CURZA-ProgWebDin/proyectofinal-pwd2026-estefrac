@@ -4,7 +4,6 @@ from flask_jwt_extended import jwt_required
 from app.controllers.vehiculo_controller import VehiculoController
 from app.decorators.rol_access import rol_access
 
-
 vehiculo_bp = Blueprint(
     "vehiculo",
     __name__,

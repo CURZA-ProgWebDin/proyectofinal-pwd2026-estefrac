@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
+
 from app.controllers.tipo_vehiculo_controller import TipoVehiculoController
 from app.decorators.rol_access import rol_access
 

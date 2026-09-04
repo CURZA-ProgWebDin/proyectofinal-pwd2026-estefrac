@@ -1,8 +1,10 @@
+from flask import Response, jsonify
+from sqlalchemy.exc import IntegrityError
+
 from app.controllers import Controller
 from app.models import db
 from app.models.tipo_vehiculo import TipoVehiculo
-from sqlalchemy.exc import IntegrityError
-from flask import Response, jsonify
+
 
 class TipoVehiculoController(Controller):
     @staticmethod

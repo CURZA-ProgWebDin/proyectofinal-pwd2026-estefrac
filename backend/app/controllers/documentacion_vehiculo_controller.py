@@ -1,12 +1,15 @@
+from datetime import date
+
+from flask import Response, jsonify
+from flask_jwt_extended import get_jwt_identity
+from sqlalchemy.exc import IntegrityError
+
 from app.controllers import Controller
 from app.models import db
-from app.models.vehiculo import Vehiculo
-from app.models.tipo_documentacion import TipoDocumentacion
 from app.models.documentacion_vehiculo import DocumentacionVehiculo
-from flask import Response, jsonify
-from datetime import date
-from sqlalchemy.exc import IntegrityError
-from flask_jwt_extended import get_jwt_identity
+from app.models.tipo_documentacion import TipoDocumentacion
+from app.models.vehiculo import Vehiculo
+
 
 class DocumentacionVehiculoController(Controller):
     @staticmethod

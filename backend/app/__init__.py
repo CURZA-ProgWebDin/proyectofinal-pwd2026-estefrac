@@ -1,9 +1,11 @@
 import os
+
 from flask import Flask
+from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
+
 from app.config import config
 from app.models import db
-from flask_migrate import Migrate
-from flask_jwt_extended import JWTManager
 from app.routes import api_v1
 
 migrate = Migrate()
