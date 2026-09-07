@@ -108,3 +108,59 @@ class AsignacionController:
             return jsonify(
                 {"message": "El vehículo o conductor ya tiene una asignación abierta."}
             ), 409
+
+    @staticmethod
+    def close(request: dict, id: int) -> tuple[Response, int]:
+        uso_regreso: int | None = request.get("uso_regreso")
+
+        if uso_regreso is None:
+            return jsonify({"message": "El uso de regreso es requerido."}), 422
+
+        asignacion = db.session.get(Asignacion, id)
+
+        if asignacion is None:
+            return jsonify({"message": "Asignación no encontrada."}), 404
+
+        vehiculo = db.session.get(Vehiculo, asignacion.vehiculo_id)
+
+        if vehiculo is None:
+            return jsonify({"message": "El vehículo asociado no existe."}), 409
+
+        if asignacion.estado != "abierta":
+            return jsonify({"message": "La asignación no está abierta."}), 409
+
+        if uso_regreso < asignacion.uso_salida:
+            return jsonify(
+                {
+                    "message": (
+                        "El uso de regreso no puede ser menor que el uso de salida."
+                    )
+                }
+            ), 422
+
+        usuario_actualizacion_id = int(get_jwt_identity())
+
+        try:
+            asignacion.uso_regreso = uso_regreso
+            asignacion.fecha_regreso = db.func.now()
+            asignacion.estado = "cerrada"
+            asignacion.usuario_actualizacion_id = usuario_actualizacion_id
+
+            vehiculo.uso_actual = uso_regreso
+            vehiculo.estado = "disponible"
+
+            db.session.commit()
+
+            return jsonify({"message": "Asignación cerrada exitosamente."}), 200
+
+        except IntegrityError:
+            db.session.rollback()
+
+            return jsonify(
+                {
+                    "message": (
+                        "No se pudo cerrar la asignación "
+                        "debido a un conflicto con los datos."
+                    )
+                }
+            ), 409
