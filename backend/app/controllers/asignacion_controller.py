@@ -164,3 +164,41 @@ class AsignacionController:
                     )
                 }
             ), 409
+
+    @staticmethod
+    def cancel(id: int) -> tuple[Response, int]:
+        asignacion = db.session.get(Asignacion, id)
+
+        if asignacion is None:
+            return jsonify({"message": "Asignación no encontrada."}), 404
+
+        vehiculo = db.session.get(Vehiculo, asignacion.vehiculo_id)
+
+        if vehiculo is None:
+            return jsonify({"message": "El vehículo asociado no existe."}), 409
+
+        if asignacion.estado != "abierta":
+            return jsonify({"message": "La asignación no está abierta."}), 409
+
+        usuario_actualizacion_id = int(get_jwt_identity())
+
+        try:
+            asignacion.estado = "cancelada"
+            asignacion.usuario_actualizacion_id = usuario_actualizacion_id
+            vehiculo.estado = "disponible"
+
+            db.session.commit()
+
+            return jsonify({"message": "Asignación cancelada exitosamente."}), 200
+
+        except IntegrityError:
+            db.session.rollback()
+
+            return jsonify(
+                {
+                    "message": (
+                        "No se pudo cancelar la asignación "
+                        "debido a un conflicto con los datos."
+                    )
+                }
+            ), 409
