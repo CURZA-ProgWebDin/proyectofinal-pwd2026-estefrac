@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from app.models import db
 from app.models.asignacion import Asignacion
 from app.models.conductor import Conductor
+from app.models.mantenimiento import Mantenimiento
 from app.models.vehiculo import Vehiculo
 
 
@@ -65,6 +66,29 @@ class AsignacionController:
 
         if vehiculo.estado != "disponible":
             return jsonify({"message": "El vehículo no está disponible."}), 409
+
+        mantenimiento_bloqueante = (
+            db.session.execute(
+                db.select(Mantenimiento).filter_by(
+                    vehiculo_id=vehiculo_id,
+                    estado="pendiente",
+                    bloquea_uso=True,
+                    activo="S",
+                )
+            )
+            .scalars()
+            .first()
+        )
+
+        if mantenimiento_bloqueante:
+            return jsonify(
+                {
+                    "message": (
+                        "El vehículo tiene un mantenimiento pendiente "
+                        "que bloquea su uso."
+                    )
+                }
+            ), 409
 
         asignacion_vehiculo = db.session.execute(
             db.select(Asignacion).filter_by(
