@@ -8,7 +8,9 @@ from sqlalchemy.exc import IntegrityError
 from app.models import db
 from app.models.asignacion import Asignacion
 from app.models.conductor import Conductor
+from app.models.documentacion_vehiculo import DocumentacionVehiculo
 from app.models.mantenimiento import Mantenimiento
+from app.models.tipo_documentacion import TipoDocumentacion
 from app.models.vehiculo import Vehiculo
 
 
@@ -88,6 +90,27 @@ class AsignacionController:
                         "que bloquea su uso."
                     )
                 }
+            ), 409
+
+        tipos_obligatorios = db.session.execute(
+            db.select(TipoDocumentacion.id).filter_by(
+                obligatorio=True,
+                activo="S",
+            )
+        ).scalars().all()
+
+        tipos_vigentes = db.session.execute(
+            db.select(DocumentacionVehiculo.tipo_documentacion_id)
+            .filter_by(
+                vehiculo_id=vehiculo_id,
+                activo="S",
+            )
+            .where(DocumentacionVehiculo.fecha_vencimiento >= hoy)
+        ).scalars().all()
+
+        if set(tipos_obligatorios) - set(tipos_vigentes):
+            return jsonify(
+                {"message": "El vehículo no tiene documentación obligatoria vigente."}
             ), 409
 
         asignacion_vehiculo = db.session.execute(
