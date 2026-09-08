@@ -28,6 +28,16 @@ class Usuario(BaseModel):
         foreign_keys="Asignacion.usuario_actualizacion_id",
         back_populates="usuario_actualizacion",
     )
+    mantenimientos_creados = db.relationship(
+        "Mantenimiento",
+        foreign_keys="Mantenimiento.usuario_id",
+        back_populates="usuario",
+    )
+    mantenimientos_actualizados = db.relationship(
+        "Mantenimiento",
+        foreign_keys="Mantenimiento.usuario_actualizacion_id",
+        back_populates="usuario_actualizacion",
+    )
     password_hash = db.Column(db.String(255), nullable=False)
 
     def __init__(

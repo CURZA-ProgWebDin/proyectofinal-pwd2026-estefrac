@@ -22,6 +22,7 @@ class Vehiculo(BaseModel):
         "DocumentacionVehiculo", back_populates="vehiculo"
     )
     asignaciones = db.relationship("Asignacion", back_populates="vehiculo")
+    mantenimientos = db.relationship("Mantenimiento", back_populates="vehiculo")
 
     def __init__(
         self,
