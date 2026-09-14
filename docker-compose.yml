@@ -43,6 +43,25 @@ services:
     networks:
       - flota_networks
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: control_flota_frontend
+
+    ports:
+      - "5173:5173"
+
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+    environment:
+      NODE_ENV: development
+
+    networks:
+      - flota_networks
+
 volumes:
   pgdata:
   pgadmin_data:
