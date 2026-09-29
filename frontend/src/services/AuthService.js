@@ -23,6 +23,15 @@ class AuthServices {
       return null
     }
   }
+
+  async me(token) {
+    const response = await axios.get('auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data
+  }
 }
 
 export default AuthServices

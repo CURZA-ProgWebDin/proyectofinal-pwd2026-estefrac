@@ -18,10 +18,18 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const authStore = useAuthStore()
-  if (to.meta.required_auth && !authStore.is_authenticated) {
-    return { name: 'Login' }
+  if (to.meta.required_auth) {
+    const valid = await authStore.validateSession()
+
+    if (valid === false) {
+      return { name: 'Login' }
+    }
+
+    if (valid === null) {
+      return false
+    }
   }
 })
 export default router

@@ -45,6 +45,9 @@ class AuthController:
             db.select(Usuario).filter_by(id=user_id)
         ).scalar_one_or_none()
 
+        if user and user.activo != "S":
+            return jsonify({"message": "Acceso denegado"}), 403
+
         if user:
             return jsonify(
                 {

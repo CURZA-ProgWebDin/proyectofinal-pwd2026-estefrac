@@ -29,13 +29,45 @@ export const useAuthStore = defineStore(
         rol_user.value = ''
       }
     }
-    function logout() {
+
+    function clearSession() {
       auth_user.value = null
       is_authenticated.value = false
       jwt.value = ''
       rol_user.value = ''
       errors.value = []
+    }
 
+    async function validateSession() {
+      errors.value = []
+
+      if (!jwt.value) {
+        clearSession()
+        return false
+      }
+
+      try {
+        const user = await service.me(jwt.value)
+
+        auth_user.value = user.nombre
+        rol_user.value = user.rol
+        is_authenticated.value = true
+        return true
+      } catch (error) {
+        const status = error.response?.status
+
+        if ([401, 403, 422, 404].includes(status)) {
+          clearSession()
+          return false
+        }
+
+        errors.value = [{ message: 'No pudimos comprobar la sesión. Intente nuevamente.' }]
+        return null
+      }
+    }
+
+    function logout() {
+      clearSession()
       router.push({ name: 'Login' })
     }
 
@@ -52,6 +84,7 @@ export const useAuthStore = defineStore(
       login,
       logout,
       goPanel,
+      validateSession,
     }
   },
   { persist: true },
