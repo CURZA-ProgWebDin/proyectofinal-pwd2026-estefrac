@@ -10,16 +10,26 @@ const router = createRouter({
       component: () => import('../components/auth/LoginComponent.vue'),
     },
     {
-      path: '/panel',
-      name: 'Panel',
+      path: '/gestion',
+      name: 'Gestion',
       meta: { required_auth: true },
-      component: () => import('../views/SessionView.vue'),
+      component: () => import('../layouts/MainLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'Inicio',
+          component: () => import('../views/DashboardView.vue'),
+        },
+      ],
     },
   ],
 })
 
 router.beforeEach(async (to) => {
   const authStore = useAuthStore()
+  if (to.name === 'Login' && authStore.jwt) {
+    return { name: 'Inicio' }
+  }
   if (to.meta.required_auth) {
     const valid = await authStore.validateSession()
 

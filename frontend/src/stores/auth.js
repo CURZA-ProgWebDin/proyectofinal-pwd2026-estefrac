@@ -71,8 +71,8 @@ export const useAuthStore = defineStore(
       router.push({ name: 'Login' })
     }
 
-    function goPanel() {
-      router.push({ name: 'Panel' })
+    function goInicio() {
+      router.push({ name: 'Inicio' })
     }
 
     return {
@@ -83,7 +83,7 @@ export const useAuthStore = defineStore(
       errors,
       login,
       logout,
-      goPanel,
+      goInicio,
       validateSession,
     }
   },

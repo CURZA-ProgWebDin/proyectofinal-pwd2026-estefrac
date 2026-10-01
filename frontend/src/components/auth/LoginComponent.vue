@@ -11,7 +11,7 @@ async function handleLogin(credentials) {
   await authStore.login(credentials)
 
   if (is_authenticated.value) {
-    authStore.goPanel()
+    authStore.goInicio()
   }
 }
 </script>
