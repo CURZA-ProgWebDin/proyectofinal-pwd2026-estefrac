@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { House, Car, UserRound, ClipboardList, Wrench, FileText, Tags, Files, Users } from 'lucide'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,8 @@ const router = createRouter({
             orden: 0,
             titulo: 'Inicio',
             grupo: 'inicio',
+            icono: House,
+            rol_access: ['admin', 'operador'],
           },
         },
         {
@@ -35,6 +38,8 @@ const router = createRouter({
             orden: 1,
             titulo: 'Vehículos',
             grupo: 'gestion',
+            icono: Car,
+            rol_access: ['admin', 'operador'],
           },
         },
         {
@@ -46,6 +51,8 @@ const router = createRouter({
             orden: 2,
             titulo: 'Conductores',
             grupo: 'gestion',
+            icono: UserRound,
+            rol_access: ['admin', 'operador'],
           },
         },
         {
@@ -57,6 +64,8 @@ const router = createRouter({
             orden: 3,
             titulo: 'Asignaciones',
             grupo: 'gestion',
+            icono: ClipboardList,
+            rol_access: ['admin', 'operador'],
           },
         },
         {
@@ -68,6 +77,8 @@ const router = createRouter({
             orden: 4,
             titulo: 'Mantenimientos',
             grupo: 'gestion',
+            icono: Wrench,
+            rol_access: ['admin', 'operador'],
           },
         },
         {
@@ -79,6 +90,8 @@ const router = createRouter({
             orden: 5,
             titulo: 'Documentación',
             grupo: 'gestion',
+            icono: FileText,
+            rol_access: ['admin', 'operador'],
           },
         },
         {
@@ -88,9 +101,11 @@ const router = createRouter({
           meta: {
             menu: true,
             orden: 6,
-            titulo: 'Tipos de vehículo',
+            titulo: 'Tipos vehículo',
             grupo: 'administracion',
             subgrupo: 'parametros',
+            icono: Tags,
+            rol_access: ['admin'],
           },
         },
         {
@@ -100,9 +115,11 @@ const router = createRouter({
           meta: {
             menu: true,
             orden: 7,
-            titulo: 'Tipos de documentación',
+            titulo: 'Tipos documentación',
             grupo: 'administracion',
             subgrupo: 'parametros',
+            icono: Files,
+            rol_access: ['admin'],
           },
         },
         {
@@ -114,17 +131,8 @@ const router = createRouter({
             orden: 8,
             titulo: 'Usuarios',
             grupo: 'administracion',
-          },
-        },
-        {
-          path: 'roles',
-          name: 'Roles',
-          component: () => import('../views/RolesView.vue'),
-          meta: {
-            menu: true,
-            orden: 9,
-            titulo: 'Roles',
-            grupo: 'administracion',
+            icono: Users,
+            rol_access: ['admin'],
           },
         },
       ],
@@ -134,18 +142,27 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const authStore = useAuthStore()
+
   if (to.name === 'Login' && authStore.jwt) {
     return { name: 'Inicio' }
   }
-  if (to.meta.required_auth) {
-    const valid = await authStore.validateSession()
 
-    if (valid === false) {
-      return { name: 'Login' }
+  const matchedRoutes = to.matched
+  for (const route of matchedRoutes) {
+    if (route.meta.required_auth) {
+      const valid = await authStore.validateSession()
+
+      if (valid === false) {
+        return { name: 'Login' }
+      }
+
+      if (valid === null) {
+        return { name: 'Login' }
+      }
     }
 
-    if (valid === null) {
-      return false
+    if (route.meta.rol_access && !route.meta.rol_access.includes(authStore.rol_user)) {
+      return { name: 'Login' }
     }
   }
 })
