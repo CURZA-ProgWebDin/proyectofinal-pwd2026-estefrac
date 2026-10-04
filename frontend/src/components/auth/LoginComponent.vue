@@ -2,6 +2,8 @@
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '../../stores/auth'
 import LoginForm from './LoginForm.vue'
+import { MorphIcon } from 'morphicons/vue'
+import { AlertCircle } from 'lucide'
 
 const authStore = useAuthStore()
 
@@ -29,11 +31,10 @@ async function handleLogin(credentials) {
 
           <LoginForm @submit="handleLogin" />
 
-          <ul v-if="errors.length" role="alert">
-            <li v-for="(error, index) in errors" :key="index">
-              {{ error.message }}
-            </li>
-          </ul>
+          <div v-if="errors.length" class="alert alert-error mt-3" role="alert">
+            <MorphIcon :icon="AlertCircle" :size="16" />
+            <span>{{ errors[0].message }}</span>
+          </div>
         </div>
 
         <div class="footer-text position-absolute start-0 end-0 text-center">FleetHub · v1.0</div>
@@ -108,6 +109,23 @@ async function handleLogin(credentials) {
   color: #727272;
   font-size: 13px;
   letter-spacing: 1px;
+}
+
+.alert-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(220, 38, 38, 0.15);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-size: 14px;
+}
+
+.alert-error svg {
+  flex-shrink: 0;
+  color: #ef4444;
 }
 
 @media (max-width: 767.98px) {
