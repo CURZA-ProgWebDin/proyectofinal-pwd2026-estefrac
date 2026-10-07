@@ -143,7 +143,7 @@ summary {
 
 nav a.router-link-exact-active:not(.parameter-link),
 details:has(a.router-link-exact-active) > summary {
-  background: linear-gradient(90deg, #08c39a, #f4df63);
+  background: #08c39a;
   color: #111216 !important;
   font-weight: 600;
 }

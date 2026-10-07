@@ -72,7 +72,7 @@ function handleSubmit() {
 
 .btn-login {
   height: 52px;
-  background: linear-gradient(90deg, #08c39a, #f4df63);
+  background: #08c39a;
   color: #111216;
   font-weight: 600;
   border: none;
