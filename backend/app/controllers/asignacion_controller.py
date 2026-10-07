@@ -24,7 +24,12 @@ class AsignacionController:
         )
 
         if asignaciones:
-            return jsonify([asignacion.to_dict() for asignacion in asignaciones]), 200
+            return jsonify(
+                [
+                    asignacion.to_dict(incluye_relaciones=True)
+                    for asignacion in asignaciones
+                ]
+            ), 200
 
         return jsonify({"message": "No se encontraron asignaciones."}), 404
 
@@ -92,21 +97,29 @@ class AsignacionController:
                 }
             ), 409
 
-        tipos_obligatorios = db.session.execute(
-            db.select(TipoDocumentacion.id).filter_by(
-                obligatorio=True,
-                activo="S",
+        tipos_obligatorios = (
+            db.session.execute(
+                db.select(TipoDocumentacion.id).filter_by(
+                    obligatorio=True,
+                    activo="S",
+                )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
 
-        tipos_vigentes = db.session.execute(
-            db.select(DocumentacionVehiculo.tipo_documentacion_id)
-            .filter_by(
-                vehiculo_id=vehiculo_id,
-                activo="S",
+        tipos_vigentes = (
+            db.session.execute(
+                db.select(DocumentacionVehiculo.tipo_documentacion_id)
+                .filter_by(
+                    vehiculo_id=vehiculo_id,
+                    activo="S",
+                )
+                .where(DocumentacionVehiculo.fecha_vencimiento >= hoy)
             )
-            .where(DocumentacionVehiculo.fecha_vencimiento >= hoy)
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
 
         if set(tipos_obligatorios) - set(tipos_vigentes):
             return jsonify(
