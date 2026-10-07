@@ -1,4 +1,6 @@
 :root {
+  --app-bg: #0a0a0a;
+
   --bs-body-font-family: 'JetBrains Mono Variable', monospace;
 
   font-family: 'JetBrains Mono Variable', monospace;
@@ -10,6 +12,10 @@ html,
 body,
 #app {
   min-height: 100%;
+}
+
+html {
+  font-size: 87.5%;
 }
 
 body {

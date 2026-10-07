@@ -31,7 +31,7 @@ const isSidebarOpen = ref(window.matchMedia('(min-width: 992px)').matches)
 .sidebar {
   flex-basis: 225px;
   flex-shrink: 0;
-  background-color: #151618;
+  background-color: var(--app-bg);
   border-right: 1px solid rgb(255 255 255 / 12%);
   margin-left: -225px;
   transition:
@@ -46,7 +46,7 @@ const isSidebarOpen = ref(window.matchMedia('(min-width: 992px)').matches)
 
 .main-layout {
   padding-top: 56px;
-  background-color: #151618;
+  background-color: var(--app-bg);
   color: #f1f3f5;
 }
 

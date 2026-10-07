@@ -81,7 +81,7 @@ async function handleLogin(credentials) {
 }
 .login-side {
   width: 50%;
-  background-color: #151618;
+  background-color: var(--app-bg);
   padding: 48px 20px;
 }
 
