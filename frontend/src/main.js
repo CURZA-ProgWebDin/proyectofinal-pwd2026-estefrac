@@ -1,4 +1,4 @@
-import '@fontsource-variable/geist'
+import '@fontsource-variable/jetbrains-mono'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/main.css'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'

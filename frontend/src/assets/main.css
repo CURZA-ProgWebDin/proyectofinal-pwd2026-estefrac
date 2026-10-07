@@ -1,7 +1,7 @@
 :root {
-  --bs-body-font-family: 'Geist Variable', sans-serif;
+  --bs-body-font-family: 'JetBrains Mono Variable', monospace;
 
-  font-family: 'Geist Variable', sans-serif;
+  font-family: 'JetBrains Mono Variable', monospace;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -16,7 +16,7 @@ body {
   min-width: 320px;
   margin: 0;
   background-color: #f8f9fa;
-  font-family: 'Geist Variable', sans-serif;
+  font-family: 'JetBrains Mono Variable', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
