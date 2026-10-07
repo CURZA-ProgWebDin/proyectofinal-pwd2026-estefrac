@@ -18,7 +18,9 @@ class DashboardController:
         limite = hoy + timedelta(days=30)
 
         vehiculos_activos = db.session.execute(
-            db.select(db.func.count()).select_from(Vehiculo).where(Vehiculo.activo == "S")
+            db.select(db.func.count())
+            .select_from(Vehiculo)
+            .where(Vehiculo.activo == "S")
         ).scalar_one()
 
         conductores_activos = db.session.execute(
@@ -39,8 +41,8 @@ class DashboardController:
             .where(
                 Mantenimiento.activo == "S",
                 Mantenimiento.estado == "pendiente",
-                Mantenimiento.fecha_programada >= hoy,
-                Mantenimiento.fecha_programada <= limite,
+                Mantenimiento.fecha_programada >= hoy,  # type: ignore[operator]
+                Mantenimiento.fecha_programada <= limite,  # type: ignore[operator]
             )
         ).scalar_one()
 
@@ -66,7 +68,8 @@ class DashboardController:
         )
 
         actividad_reciente = [
-            asignacion.to_dict(incluye_relaciones=True) for asignacion in actividad_reciente
+            asignacion.to_dict(incluye_relaciones=True)
+            for asignacion in actividad_reciente
         ]
 
         return jsonify(

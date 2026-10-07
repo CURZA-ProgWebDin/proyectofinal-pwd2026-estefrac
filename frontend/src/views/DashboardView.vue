@@ -1,5 +1,13 @@
 <script setup>
+import { onMounted } from 'vue'
 import DashboardCards from '../components/dashboard/DashboardCards.vue'
+import { useDashboardStore } from '../stores/dashboard'
+
+const dashboardStore = useDashboardStore()
+
+onMounted(() => {
+  dashboardStore.listar()
+})
 </script>
 
 <template>
