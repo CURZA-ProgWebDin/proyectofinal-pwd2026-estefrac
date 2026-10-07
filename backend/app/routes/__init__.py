@@ -3,6 +3,7 @@ from flask import Blueprint
 from app.routes.asignacion_routes import asignacion_bp
 from app.routes.auth_routes import auth_bp
 from app.routes.conductor_routes import conductor_bp
+from app.routes.dashboard_routes import dashboard_bp
 from app.routes.documentacion_vehiculo_routes import documentacion_vehiculo_bp
 from app.routes.mantenimiento_routes import mantenimiento_bp
 from app.routes.rol_routes import rol_bp
@@ -22,3 +23,4 @@ api_v1.register_blueprint(usuario_bp)
 api_v1.register_blueprint(conductor_bp)
 api_v1.register_blueprint(tipo_documentacion_bp)
 api_v1.register_blueprint(documentacion_vehiculo_bp)
+api_v1.register_blueprint(dashboard_bp)
