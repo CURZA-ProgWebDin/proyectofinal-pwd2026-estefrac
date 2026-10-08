@@ -50,11 +50,13 @@ const fechaBonita = (iso) => {
           </thead>
           <tbody>
             <tr v-for="fila in resumen.actividad_reciente" :key="fila.id">
-              <td>{{ fechaBonita(fila.fecha_salida) }}</td>
-              <td class="fw-semibold">{{ fila.vehiculo.patente }}</td>
-              <td>{{ fila.conductor.apellido }}, {{ fila.conductor.nombre }}</td>
-              <td>{{ fila.destino ?? '—' }}</td>
-              <td>
+              <td :data-label="'Fecha'">{{ fechaBonita(fila.fecha_salida) }}</td>
+              <td :data-label="'Vehículo'" class="fw-semibold">{{ fila.vehiculo.patente }}</td>
+              <td :data-label="'Conductor'">
+                {{ fila.conductor.apellido }}, {{ fila.conductor.nombre }}
+              </td>
+              <td :data-label="'Destino'">{{ fila.destino ?? '—' }}</td>
+              <td :data-label="'Estado'">
                 <span class="badge rounded-pill" :class="`estado-${fila.estado}`">
                   {{ fila.estado }}
                 </span>
@@ -91,5 +93,40 @@ const fechaBonita = (iso) => {
 .estado-cerrada {
   background-color: #4b5057;
   color: #fff;
+}
+
+@media (max-width: 767.98px) {
+  .tabla-actividad {
+    --bs-table-hover-bg: transparent;
+  }
+
+  .tabla-actividad thead {
+    display: none;
+  }
+  .tabla-actividad,
+  .tabla-actividad tbody,
+  .tabla-actividad tr,
+  .tabla-actividad td {
+    display: block;
+    width: 100%;
+  }
+  .tabla-actividad tr {
+    border: 1px solid rgb(255 255 255 / 12%);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+    background-color: rgb(255 255 255 / 3%);
+  }
+  .tabla-actividad td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 0;
+    padding: 0.15rem 0;
+  }
+  .tabla-actividad td::before {
+    content: attr(data-label);
+    color: #08c39a;
+  }
 }
 </style>

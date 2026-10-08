@@ -54,6 +54,10 @@ const isSidebarOpen = ref(window.matchMedia('(min-width: 992px)').matches)
   position: relative;
 }
 
+.content-column {
+  min-width: 0;
+}
+
 @media (max-width: 991.98px) {
   .sidebar {
     position: absolute;
