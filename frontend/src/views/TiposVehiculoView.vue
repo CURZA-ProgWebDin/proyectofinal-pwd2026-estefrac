@@ -1,3 +1,165 @@
+<script setup>
+import { onMounted, ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { MorphIcon } from 'morphicons/vue'
+import { Plus, Pencil } from 'lucide'
+import { toast } from 'vue3-toastify'
+import { useTiposVehiculoStore } from '../stores/tipos_vehiculos'
+import TiposVehiculoModal from '../components/tipos_vehiculo/TiposVehiculoModal.vue'
+
+const tiposStore = useTiposVehiculoStore()
+const { tiposVehiculo, cargando, errors } = storeToRefs(tiposStore)
+
+const modalAbierto = ref(false)
+const modoModal = ref('crear')
+const tipoSeleccionado = ref(null)
+
+onMounted(() => {
+  tiposStore.listar()
+})
+
+function abrirCrear() {
+  tiposStore.errors = []
+  modoModal.value = 'crear'
+  tipoSeleccionado.value = null
+  modalAbierto.value = true
+}
+
+async function abrirEditar(tipo) {
+  tiposStore.errors = []
+  await tiposStore.obtener(tipo.id)
+
+  if (errors.value.length) {
+    toast.error(errors.value[0].message)
+    return
+  }
+
+  modoModal.value = 'editar'
+  tipoSeleccionado.value = tiposStore.tipo
+  modalAbierto.value = true
+}
+
+async function alGuardar(datos) {
+  const ok =
+    modoModal.value === 'crear'
+      ? await tiposStore.crear(datos)
+      : await tiposStore.modificar(datos, tipoSeleccionado.value.id)
+
+  if (ok) {
+    toast.success(
+      modoModal.value === 'crear'
+        ? 'Tipo de vehículo creado exitosamente'
+        : 'Tipo de vehículo actualizado exitosamente',
+    )
+    modalAbierto.value = false
+    tiposStore.listar()
+  }
+}
+</script>
+
 <template>
-  <h1>Tipos de vehículo</h1>
+  <div class="d-flex justify-content-end mb-3">
+    <button
+      class="btn btn-sm boton-verde d-inline-flex align-items-center gap-1"
+      @click="abrirCrear"
+    >
+      <MorphIcon :icon="Plus" :size="14" />
+      Nuevo
+    </button>
+  </div>
+
+  <div class="card tarjeta-tipos text-white mb-4">
+    <div class="card-body">
+      <p v-if="errors[0] && !tiposVehiculo.length" class="text-danger small mb-0">{{ errors[0].message }}</p>
+      <p v-else-if="cargando" class="mb-0">Cargando...</p>
+      <p v-else-if="!tiposVehiculo.length" class="text-light text-opacity-50 mb-0">
+        Todavía no hay tipos cargados.
+      </p>
+      <div v-else class="table-responsive">
+        <table class="table table-hover align-middle mb-0 tabla-tipos">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Unidad de uso</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="tipo in tiposVehiculo" :key="tipo.id">
+              <td class="fw-semibold">{{ tipo.nombre }}</td>
+              <td>{{ tipo.unidad_uso }}</td>
+              <td>
+                <span
+                  class="badge rounded-pill"
+                  :class="tipo.activo === 'S' ? 'estado-activo' : 'estado-inactivo'"
+                >
+                  {{ tipo.activo === 'S' ? 'activo' : 'inactivo' }}
+                </span>
+              </td>
+              <td class="text-end">
+                <button class="btn btn-sm boton-verde-outline" @click="abrirEditar(tipo)">
+                  <MorphIcon :icon="Pencil" :size="14" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <TiposVehiculoModal
+    v-if="modalAbierto"
+    :modo="modoModal"
+    :tipo="tipoSeleccionado"
+    :errors="errors"
+    @guardar="alGuardar"
+    @cerrar="modalAbierto = false"
+  />
 </template>
+
+<style scoped>
+.tarjeta-tipos {
+  background-color: var(--app-bg);
+  border: 1px solid var(--borde);
+}
+.tabla-tipos {
+  --bs-table-color: #fff;
+  --bs-table-bg: transparent;
+  --bs-table-border-color: var(--borde);
+  --bs-table-hover-color: #fff;
+  --bs-table-hover-bg: rgb(255 255 255 / 4%);
+}
+.tabla-tipos thead th {
+  color: var(--verde);
+}
+.estado-activo {
+  background-color: var(--verde);
+  color: #0a0a0a;
+}
+.estado-inactivo {
+  background-color: #4b5057;
+  color: #fff;
+}
+.boton-verde {
+  background-color: var(--verde);
+  border-color: var(--verde);
+  color: #0a0a0a;
+  font-weight: 600;
+}
+.boton-verde:hover {
+  background-color: var(--verde-hover);
+  border-color: var(--verde-hover);
+  color: #0a0a0a;
+}
+.boton-verde-outline {
+  border-color: var(--verde);
+  color: var(--verde);
+  background-color: transparent;
+}
+.boton-verde-outline:hover {
+  background-color: var(--verde);
+  color: #0a0a0a;
+}
+</style>
