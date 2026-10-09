@@ -44,14 +44,15 @@ defineProps({
 
 <style scoped>
 .dashboard-card {
-  background-color: #1e2023;
+  background-color: var(--app-bg);
+  border: 1px solid var(--borde);
 }
 .dashboard-card-title {
-  color: #08c39a;
+  color: var(--verde);
   min-height: 2.4rem;
 }
 .dashboard-card:hover {
-  border-color: #08c39a;
+  border-color: var(--verde);
 }
 .dashboard-card-title h2 {
   line-height: 1.2rem;

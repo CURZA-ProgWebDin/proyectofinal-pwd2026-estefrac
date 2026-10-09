@@ -3,8 +3,11 @@ import TopBar from '../components/layout/TopBar.vue'
 import SidebarNav from '../components/layout/SidebarNav.vue'
 import FooterBar from '../components/layout/FooterBar.vue'
 import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 const isSidebarOpen = ref(window.matchMedia('(min-width: 992px)').matches)
+
+const route = useRoute()
 </script>
 
 <template>
@@ -18,6 +21,10 @@ const isSidebarOpen = ref(window.matchMedia('(min-width: 992px)').matches)
 
       <div class="content-column d-flex flex-column flex-grow-1">
         <main class="page-content flex-grow-1 p-4">
+          <header class="page-header mb-2">
+            <h1 class="page-titulo mb-0">{{ route.meta.titulo }}</h1>
+          </header>
+
           <RouterView />
         </main>
       </div>
@@ -32,7 +39,7 @@ const isSidebarOpen = ref(window.matchMedia('(min-width: 992px)').matches)
   flex-basis: 225px;
   flex-shrink: 0;
   background-color: var(--app-bg);
-  border-right: 1px solid rgb(255 255 255 / 12%);
+  border-right: 1px solid var(--borde);
   margin-left: -225px;
   transition:
     margin-left 250ms ease-in-out,
@@ -56,6 +63,11 @@ const isSidebarOpen = ref(window.matchMedia('(min-width: 992px)').matches)
 
 .content-column {
   min-width: 0;
+}
+
+.page-titulo {
+  font-size: 2.25rem;
+  font-weight: 600;
 }
 
 @media (max-width: 991.98px) {

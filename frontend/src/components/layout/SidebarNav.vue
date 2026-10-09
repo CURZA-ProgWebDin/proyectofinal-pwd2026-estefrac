@@ -143,7 +143,7 @@ summary {
 
 nav a.router-link-exact-active:not(.parameter-link),
 details:has(a.router-link-exact-active) > summary {
-  background: #08c39a;
+  background: var(--verde);
   color: #111216 !important;
   font-weight: 600;
 }

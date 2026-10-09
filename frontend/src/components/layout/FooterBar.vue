@@ -7,6 +7,6 @@
 <style scoped>
 .app-footer {
   background-color: var(--app-bg);
-  border-top: 1px solid rgb(255 255 255 / 12%);
+  border-top: 1px solid var(--borde);
 }
 </style>

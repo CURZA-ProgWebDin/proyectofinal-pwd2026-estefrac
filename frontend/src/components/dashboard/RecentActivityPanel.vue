@@ -71,23 +71,24 @@ const fechaBonita = (iso) => {
 
 <style scoped>
 .tarjeta-actividad {
-  background-color: #1e2023;
-}
-.tarjeta-actividad:hover {
-  border-color: #08c39a;
+  background-color: var(--app-bg);
+  border: 1px solid var(--borde);
 }
 .enlace {
-  color: #08c39a;
+  color: var(--verde);
 }
 .tabla-actividad {
   --bs-table-color: #fff;
   --bs-table-bg: transparent;
-  --bs-table-border-color: rgb(255 255 255 / 12%);
+  --bs-table-border-color: var(--borde);
   --bs-table-hover-color: #fff;
   --bs-table-hover-bg: rgb(255 255 255 / 4%);
 }
+.tabla-actividad thead th {
+  color: var(--verde);
+}
 .estado-abierta {
-  background-color: #08c39a;
+  background-color: var(--verde);
   color: #0a0a0a;
 }
 .estado-cerrada {
@@ -111,7 +112,7 @@ const fechaBonita = (iso) => {
     width: 100%;
   }
   .tabla-actividad tr {
-    border: 1px solid rgb(255 255 255 / 12%);
+    border: 1px solid var(--borde);
     border-radius: 6px;
     padding: 0.5rem 0.75rem;
     margin-bottom: 0.75rem;
@@ -126,7 +127,7 @@ const fechaBonita = (iso) => {
   }
   .tabla-actividad td::before {
     content: attr(data-label);
-    color: #08c39a;
+    color: var(--verde);
   }
 }
 </style>

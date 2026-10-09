@@ -56,7 +56,7 @@ const authStore = useAuthStore()
 .topbar {
   height: 56px;
   background-color: var(--app-bg);
-  border-bottom: 1px solid rgb(255 255 255 / 12%);
+  border-bottom: 1px solid var(--borde);
 }
 
 .user-actions {

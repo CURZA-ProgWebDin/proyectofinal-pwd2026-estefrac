@@ -66,13 +66,13 @@ function handleSubmit() {
 .form-control-dark:focus {
   color: #fff;
   background-color: #2a2b2e;
-  border-color: #08c39a;
+  border-color: var(--verde);
   box-shadow: none;
 }
 
 .btn-login {
   height: 52px;
-  background: #08c39a;
+  background: var(--verde);
   color: #111216;
   font-weight: 600;
   border: none;

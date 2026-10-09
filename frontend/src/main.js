@@ -1,6 +1,8 @@
-import '@fontsource-variable/jetbrains-mono'
+import '@fontsource-variable/geist'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './assets/main.css'
+import Vue3Toastify from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import { createApp } from 'vue'
@@ -14,6 +16,11 @@ const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 app.use(pinia)
+app.use(Vue3Toastify, {
+  autoClose: 5000,
+  theme: 'dark',
+  position: 'bottom-right',
+})
 app.use(router)
 
 app.mount('#app')
