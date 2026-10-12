@@ -8,7 +8,7 @@ export const useTiposVehiculoStore = defineStore('tiposVehiculo', () => {
   const authStore = useAuthStore()
 
   const tiposVehiculo = ref([])
-  const tipo = ref(null)
+  const tipoVehiculoActual = ref(null)
   const cargando = ref(false)
   const errors = ref([])
 
@@ -37,7 +37,7 @@ export const useTiposVehiculoStore = defineStore('tiposVehiculo', () => {
       errors.value = service.errors
 
       if (response !== null) {
-        tipo.value = response
+        tipoVehiculoActual.value = response
       }
     } finally {
       cargando.value = false
@@ -85,7 +85,7 @@ export const useTiposVehiculoStore = defineStore('tiposVehiculo', () => {
 
   return {
     tiposVehiculo,
-    tipo,
+    tipoVehiculoActual,
     cargando,
     errors,
     listar,

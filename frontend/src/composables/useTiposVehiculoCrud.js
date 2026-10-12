@@ -26,7 +26,7 @@ export function useTiposVehiculoCrud() {
     }
 
     modoModal.value = 'editar'
-    tipoSeleccionado.value = tiposStore.tipo
+    tipoSeleccionado.value = tiposStore.tipoVehiculoActual
     modalAbierto.value = true
   }
 
