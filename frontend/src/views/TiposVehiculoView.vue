@@ -1,60 +1,21 @@
 <script setup>
-import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 import { MorphIcon } from 'morphicons/vue'
 import { Plus, Pencil } from 'lucide'
-import { toast } from 'vue3-toastify'
 import { useTiposVehiculoStore } from '../stores/tipos_vehiculos'
+import { useTiposVehiculoCrud } from '../composables/useTiposVehiculoCrud'
 import TiposVehiculoModal from '../components/tipos_vehiculo/TiposVehiculoModal.vue'
 
 const tiposStore = useTiposVehiculoStore()
 const { tiposVehiculo, cargando, errors } = storeToRefs(tiposStore)
 
-const modalAbierto = ref(false)
-const modoModal = ref('crear')
-const tipoSeleccionado = ref(null)
+const { modalAbierto, modoModal, tipoSeleccionado, abrirCrear, abrirEditar, guardar } =
+  useTiposVehiculoCrud()
 
 onMounted(() => {
   tiposStore.listar()
 })
-
-function abrirCrear() {
-  tiposStore.errors = []
-  modoModal.value = 'crear'
-  tipoSeleccionado.value = null
-  modalAbierto.value = true
-}
-
-async function abrirEditar(tipo) {
-  tiposStore.errors = []
-  await tiposStore.obtener(tipo.id)
-
-  if (errors.value.length) {
-    toast.error(errors.value[0].message)
-    return
-  }
-
-  modoModal.value = 'editar'
-  tipoSeleccionado.value = tiposStore.tipo
-  modalAbierto.value = true
-}
-
-async function alGuardar(datos) {
-  const ok =
-    modoModal.value === 'crear'
-      ? await tiposStore.crear(datos)
-      : await tiposStore.modificar(datos, tipoSeleccionado.value.id)
-
-  if (ok) {
-    toast.success(
-      modoModal.value === 'crear'
-        ? 'Tipo de vehículo creado exitosamente'
-        : 'Tipo de vehículo actualizado exitosamente',
-    )
-    modalAbierto.value = false
-    tiposStore.listar()
-  }
-}
 </script>
 
 <template>
@@ -70,7 +31,9 @@ async function alGuardar(datos) {
 
   <div class="card tarjeta-tipos text-white mb-4">
     <div class="card-body">
-      <p v-if="errors[0] && !tiposVehiculo.length" class="text-danger small mb-0">{{ errors[0].message }}</p>
+      <p v-if="errors[0] && !tiposVehiculo.length" class="text-danger small mb-0">
+        {{ errors[0].message }}
+      </p>
       <p v-else-if="cargando" class="mb-0">Cargando...</p>
       <p v-else-if="!tiposVehiculo.length" class="text-light text-opacity-50 mb-0">
         Todavía no hay tipos cargados.
@@ -114,7 +77,7 @@ async function alGuardar(datos) {
     :modo="modoModal"
     :tipo="tipoSeleccionado"
     :errors="errors"
-    @guardar="alGuardar"
+    @guardar="guardar"
     @cerrar="modalAbierto = false"
   />
 </template>
