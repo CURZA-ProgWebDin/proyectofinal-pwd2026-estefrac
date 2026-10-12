@@ -87,7 +87,7 @@ async function alGuardar(datos) {
           </thead>
           <tbody>
             <tr v-for="tipo in tiposVehiculo" :key="tipo.id">
-              <td class="fw-semibold">{{ tipo.nombre }}</td>
+              <td>{{ tipo.nombre }}</td>
               <td>{{ tipo.unidad_uso }}</td>
               <td>
                 <span
@@ -133,6 +133,10 @@ async function alGuardar(datos) {
 }
 .tabla-tipos thead th {
   color: var(--verde);
+}
+.tabla-tipos tbody td {
+  color: rgb(255 255 255 / 72%);
+  font-weight: 350;
 }
 .estado-activo {
   background-color: var(--verde);

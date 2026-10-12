@@ -51,7 +51,7 @@ const fechaBonita = (iso) => {
           <tbody>
             <tr v-for="fila in resumen.actividad_reciente" :key="fila.id">
               <td :data-label="'Fecha'">{{ fechaBonita(fila.fecha_salida) }}</td>
-              <td :data-label="'Vehículo'" class="fw-semibold">{{ fila.vehiculo.patente }}</td>
+              <td :data-label="'Vehículo'">{{ fila.vehiculo.patente }}</td>
               <td :data-label="'Conductor'">
                 {{ fila.conductor.apellido }}, {{ fila.conductor.nombre }}
               </td>
@@ -86,6 +86,10 @@ const fechaBonita = (iso) => {
 }
 .tabla-actividad thead th {
   color: var(--verde);
+}
+.tabla-actividad tbody td {
+  color: rgb(255 255 255 / 72%);
+  font-weight: 350;
 }
 .estado-abierta {
   background-color: var(--verde);
