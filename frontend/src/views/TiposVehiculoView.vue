@@ -7,14 +7,14 @@ import { useTiposVehiculoStore } from '../stores/tipos_vehiculos'
 import { useTiposVehiculoCrud } from '../composables/useTiposVehiculoCrud'
 import TiposVehiculoModal from '../components/tipos_vehiculo/TiposVehiculoModal.vue'
 
-const tiposStore = useTiposVehiculoStore()
-const { tiposVehiculo, cargando, errors } = storeToRefs(tiposStore)
+const tiposVehiculoStore = useTiposVehiculoStore()
+const { tiposVehiculo, cargando, errors } = storeToRefs(tiposVehiculoStore)
 
 const { modalAbierto, modoModal, tipoSeleccionado, abrirCrear, abrirEditar, guardar } =
   useTiposVehiculoCrud()
 
 onMounted(() => {
-  tiposStore.listar()
+  tiposVehiculoStore.listar()
 })
 </script>
 
