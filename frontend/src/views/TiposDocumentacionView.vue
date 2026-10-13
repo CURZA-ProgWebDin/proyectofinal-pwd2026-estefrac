@@ -1,10 +1,12 @@
 <script setup>
 import { MorphIcon } from 'morphicons/vue'
-import { Pencil, Check } from 'lucide'
+import { Pencil, Check, Plus } from 'lucide'
 </script>
 <template>
   <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-sm boton-verde d-inline-flex align-items-center gap-1">Nuevo</button>
+    <button class="btn btn-sm boton-verde d-inline-flex align-items-center gap-1">
+      <MorphIcon :icon="Plus" :size="14" />Nuevo
+    </button>
   </div>
 
   <div class="card tarjeta-tipos text-white mb-4">

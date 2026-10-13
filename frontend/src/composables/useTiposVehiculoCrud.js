@@ -3,38 +3,38 @@ import { toast } from 'vue3-toastify'
 import { useTiposVehiculoStore } from '../stores/tipos_vehiculos'
 
 export function useTiposVehiculoCrud() {
-  const tiposStore = useTiposVehiculoStore()
+  const tiposVehiculoStore = useTiposVehiculoStore()
 
   const modalAbierto = ref(false)
   const modoModal = ref('crear')
   const tipoSeleccionado = ref(null)
 
   function abrirCrear() {
-    tiposStore.errors = []
+    tiposVehiculoStore.errors = []
     modoModal.value = 'crear'
     tipoSeleccionado.value = null
     modalAbierto.value = true
   }
 
   async function abrirEditar(tipo) {
-    tiposStore.errors = []
-    await tiposStore.obtener(tipo.id)
+    tiposVehiculoStore.errors = []
+    await tiposVehiculoStore.obtener(tipo.id)
 
-    if (tiposStore.errors.length) {
-      toast.error(tiposStore.errors[0].message)
+    if (tiposVehiculoStore.errors.length) {
+      toast.error(tiposVehiculoStore.errors[0].message)
       return
     }
 
     modoModal.value = 'editar'
-    tipoSeleccionado.value = tiposStore.tipoVehiculoActual
+    tipoSeleccionado.value = tiposVehiculoStore.tipoVehiculoActual
     modalAbierto.value = true
   }
 
   async function guardar(datos) {
     const ok =
       modoModal.value === 'crear'
-        ? await tiposStore.crear(datos)
-        : await tiposStore.modificar(datos, tipoSeleccionado.value.id)
+        ? await tiposVehiculoStore.crear(datos)
+        : await tiposVehiculoStore.modificar(datos, tipoSeleccionado.value.id)
 
     if (ok) {
       toast.success(
@@ -43,7 +43,7 @@ export function useTiposVehiculoCrud() {
           : 'Tipo de vehículo actualizado exitosamente',
       )
       modalAbierto.value = false
-      tiposStore.listar()
+      tiposVehiculoStore.listar()
     }
   }
 
