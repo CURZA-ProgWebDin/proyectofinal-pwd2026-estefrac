@@ -44,6 +44,11 @@ const route = useRoute()
   transition:
     margin-left 250ms ease-in-out,
     transform 250ms ease-in-out;
+  position: sticky;
+  top: 56px;
+  align-self: flex-start;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
 }
 
 .sidebar-open .sidebar {
@@ -72,8 +77,8 @@ const route = useRoute()
 
 @media (max-width: 991.98px) {
   .sidebar {
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: 56px;
     bottom: 0;
     left: 0;
     width: 225px;
