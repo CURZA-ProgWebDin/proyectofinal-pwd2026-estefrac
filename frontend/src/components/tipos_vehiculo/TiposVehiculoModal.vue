@@ -9,7 +9,7 @@ const props = defineProps({
     required: true,
     validator: (valor) => ['crear', 'editar'].includes(valor),
   },
-  tipo: {
+  tipoVehiculo: {
     type: Object,
     default: null,
   },
@@ -17,14 +17,18 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  guardando: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(['guardar', 'cerrar'])
 
 const formulario = reactive({
-  nombre: props.tipo?.nombre ?? '',
-  unidad_uso: props.tipo?.unidad_uso ?? '',
-  activo: props.tipo?.activo ?? 'S',
+  nombre: props.tipoVehiculo?.nombre ?? '',
+  unidad_uso: props.tipoVehiculo?.unidad_uso ?? '',
+  activo: props.tipoVehiculo?.activo ?? 'S',
 })
 
 const titulo = props.modo === 'crear' ? 'Nuevo tipo de vehículo' : 'Editar tipo de vehículo'
@@ -95,7 +99,9 @@ function guardar() {
               <button type="button" class="btn btn-outline-light" @click="emit('cerrar')">
                 Cancelar
               </button>
-              <button type="submit" class="btn boton-verde">Guardar</button>
+              <button type="submit" class="btn boton-verde" :disabled="guardando">
+                {{ guardando ? 'Guardando…' : 'Guardar' }}
+              </button>
             </div>
           </form>
         </div>

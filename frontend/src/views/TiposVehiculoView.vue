@@ -4,14 +4,24 @@ import { onMounted } from 'vue'
 import { MorphIcon } from 'morphicons/vue'
 import { Plus, Pencil } from 'lucide'
 import { useTiposVehiculoStore } from '../stores/tipos_vehiculos'
-import { useTiposVehiculoCrud } from '../composables/useTiposVehiculoCrud'
+import { useCrudModal } from '../composables/useCrudModal'
 import TiposVehiculoModal from '../components/tipos_vehiculo/TiposVehiculoModal.vue'
 
 const tiposVehiculoStore = useTiposVehiculoStore()
 const { tiposVehiculo, cargando, errors } = storeToRefs(tiposVehiculoStore)
 
-const { modalAbierto, modoModal, tipoSeleccionado, abrirCrear, abrirEditar, guardar } =
-  useTiposVehiculoCrud()
+const {
+  modalAbierto,
+  modoModal,
+  registroSeleccionado,
+  guardando,
+  abrirCrear,
+  abrirEditar,
+  guardar,
+} = useCrudModal(tiposVehiculoStore, () => tiposVehiculoStore.tipoVehiculoActual, {
+  crear: 'Tipo de vehículo creado exitosamente',
+  modificar: 'Tipo de vehículo actualizado exitosamente',
+})
 
 onMounted(() => {
   tiposVehiculoStore.listar()
@@ -75,8 +85,9 @@ onMounted(() => {
   <TiposVehiculoModal
     v-if="modalAbierto"
     :modo="modoModal"
-    :tipo="tipoSeleccionado"
+    :tipo-vehiculo="registroSeleccionado"
     :errors="errors"
+    :guardando="guardando"
     @guardar="guardar"
     @cerrar="modalAbierto = false"
   />
