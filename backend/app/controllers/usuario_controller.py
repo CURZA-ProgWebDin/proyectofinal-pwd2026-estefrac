@@ -10,12 +10,16 @@ from app.models.usuario import Usuario
 class UsuarioController(Controller):
     @staticmethod
     def get_all() -> tuple[Response, int]:
-        usuarios = db.session.execute(
-            db.select(Usuario).order_by(db.desc(Usuario.id))
-        ).scalars().all()
+        usuarios = (
+            db.session.execute(db.select(Usuario).order_by(db.desc(Usuario.id)))
+            .scalars()
+            .all()
+        )
 
         if usuarios:
-            return jsonify([usuario.to_dict() for usuario in usuarios]), 200
+            return jsonify(
+                [usuario.to_dict(incluye_rol=True) for usuario in usuarios]
+            ), 200
 
         return jsonify({"message": "No se encontraron usuarios"}), 404
 
@@ -76,7 +80,6 @@ class UsuarioController(Controller):
         rol_id: int | None = request.get("rol_id")
         activo: str | None = request.get("activo")
 
-        
         if nombre is None:
             return jsonify({"message": "El nombre es requerido"}), 422
 
