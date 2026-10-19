@@ -75,6 +75,22 @@ class ApiService {
     }
   }
 
+  async postAction(id, action, data, token) {
+    this.errors = []
+
+    try {
+      const response = await axios.post(`${this.collection_url}${id}/${action}`, data ?? {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      return response.data
+    } catch (error) {
+      this.errors.push(error.response?.data ?? { message: 'Error de red' })
+      return null
+    }
+  }
+
   async destroy(id, token) {
     this.errors = []
 
