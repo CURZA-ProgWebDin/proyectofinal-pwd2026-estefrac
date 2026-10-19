@@ -8,7 +8,6 @@ export const useUsuariosStore = defineStore('usuarios', () => {
     usuarios: crud.registros,
     usuarioActual: crud.registroActual,
     cargando: crud.cargando,
-    cargando: crud.cargando,
     errors: crud.errors,
     listar: crud.listar,
     obtener: crud.obtener,

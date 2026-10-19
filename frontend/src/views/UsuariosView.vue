@@ -4,18 +4,41 @@ import { onMounted } from 'vue'
 import { MorphIcon } from 'morphicons/vue'
 import { Pencil, Plus } from 'lucide'
 import { useUsuariosStore } from '../stores/usuarios'
+import { useRolesStore } from '../stores/roles'
+import { useCrudModal } from '../composables/useCrudModal'
+import usuarioModal from '../components/usuarios/usuarioModal.vue'
 
 const usuariosStore = useUsuariosStore()
 const { usuarios, cargando, errors } = storeToRefs(usuariosStore)
 
+const rolesStore = useRolesStore()
+const { roles } = storeToRefs(rolesStore)
+
+const {
+  modalAbierto,
+  modoModal,
+  registroSeleccionado,
+  guardando,
+  abrirCrear,
+  abrirEditar,
+  guardar,
+} = useCrudModal(usuariosStore, () => usuariosStore.usuarioActual, {
+  crear: 'Usuario creado exitosamente',
+  modificar: 'Usuario actualizado exitosamente',
+})
+
 onMounted(() => {
   usuariosStore.listar()
+  rolesStore.listar()
 })
 </script>
 
 <template>
   <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-sm boton-verde d-inline-flex align-items-center gap-1">
+    <button
+      class="btn btn-sm boton-verde d-inline-flex align-items-center gap-1"
+      @click="abrirCrear"
+    >
       <MorphIcon :icon="Plus" :size="14" />
       Nuevo
     </button>
@@ -23,7 +46,14 @@ onMounted(() => {
 
   <div class="card tarjeta-tipos text-white mb-4">
     <div class="card-body">
-      <div class="table-responsive">
+      <p v-if="errors[0] && !usuarios.length" class="text-danger small mb-0">
+        {{ errors[0].message }}
+      </p>
+      <p v-else-if="cargando" class="mb-0">Cargando...</p>
+      <p v-else-if="!usuarios.length" class="text-light text-opacity-50 mb-0">
+        No hay Usuarios cargados
+      </p>
+      <div v-else class="table-responsive">
         <table class="table table-hover align-middle mb-0 tabla-tipos">
           <thead>
             <tr>
@@ -47,7 +77,7 @@ onMounted(() => {
                 >
               </td>
               <td class="text-end">
-                <button class="btn btn-sm boton-verde-outline">
+                <button class="btn btn-sm boton-verde-outline" @click="abrirEditar(usuario)">
                   <MorphIcon :icon="Pencil" :size="14" />
                 </button>
               </td>
@@ -57,6 +87,16 @@ onMounted(() => {
       </div>
     </div>
   </div>
+  <usuarioModal
+    v-if="modalAbierto"
+    :modo="modoModal"
+    :usuario="registroSeleccionado"
+    :roles="roles"
+    :errors="errors"
+    :guardando="guardando"
+    @guardar="guardar"
+    @cerrar="modalAbierto = false"
+  />
 </template>
 
 <style scoped>
