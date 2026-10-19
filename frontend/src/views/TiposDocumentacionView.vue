@@ -1,6 +1,7 @@
 <script setup>
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useAuthStore } from '../stores/auth'
 import { MorphIcon } from 'morphicons/vue'
 import { Pencil, Check, Plus, Minus } from 'lucide'
 import { useTiposDocumentacionStore } from '../stores/tipos_documentacion'
@@ -23,12 +24,15 @@ const {
   modificar: 'Tipo de documentación actualizado exitosamente',
 })
 
+const { rol_user } = storeToRefs(useAuthStore())
+const esAdmin = computed(() => rol_user.value === 'admin')
+
 onMounted(() => {
   tiposDocumentacionStore.listar()
 })
 </script>
 <template>
-  <div class="d-flex justify-content-end mb-3">
+  <div v-if="esAdmin" class="d-flex justify-content-end mb-3">
     <button
       class="btn btn-sm boton-verde d-inline-flex align-items-center gap-1"
       @click="abrirCrear"
@@ -53,7 +57,7 @@ onMounted(() => {
               <th>Nombre</th>
               <th>Obligatorio</th>
               <th>Estado</th>
-              <th></th>
+              <th v-if="esAdmin" class="columna-acciones"></th>
             </tr>
           </thead>
 
@@ -69,7 +73,7 @@ onMounted(() => {
                   {{ tipo.activo === 'S' ? 'activo' : 'inactivo' }}
                 </span>
               </td>
-              <td class="text-end">
+              <td v-if="esAdmin" class="text-end">
                 <button class="btn btn-sm boton-verde-outline" @click="abrirEditar(tipo)">
                   <MorphIcon :icon="Pencil" :size="14" />
                 </button>
@@ -102,6 +106,7 @@ onMounted(() => {
   --bs-table-border-color: var(--borde);
   --bs-table-hover-color: #fff;
   --bs-table-hover-bg: rgb(255 255 255 / 4%);
+  min-width: 36rem;
 }
 .tabla-tipos thead th {
   color: var(--verde);
@@ -137,5 +142,8 @@ onMounted(() => {
 .boton-verde-outline:hover {
   background-color: var(--verde);
   color: #0a0a0a;
+}
+.tabla-tipos .columna-acciones {
+  width: 3rem;
 }
 </style>
